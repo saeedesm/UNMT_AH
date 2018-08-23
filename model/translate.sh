@@ -19,44 +19,44 @@ fasttext_epochs=$4  # 20
 unsupervised_batches=$5 # 4000
 
 # Tokenize data
-#$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < parallel.$src > parallel.tok.$src
-#$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < parallel.$tgt > parallel.tok.$tgt
-#$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < ../data/corpus1.txt > corpus.tok.$src
-#$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < ../data/corpus2.txt > corpus.tok.$tgt
-#$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < ../data/input.txt > input.tok.$src
+$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < parallel.$src > parallel.tok.$src
+$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < parallel.$tgt > parallel.tok.$tgt
+$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < ../data/corpus1.txt > corpus.tok.$src
+$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < ../data/corpus2.txt > corpus.tok.$tgt
+$mosesdecoder/scripts/tokenizer/tokenizer.perl -q -threads 16 < ../data/input.txt > input.tok.$src
 #
 ## Clean all corpora
-#$mosesdecoder/scripts/training/clean-corpus-n.perl parallel.tok $src $tgt parallel.tok.clean 1 80
-#$mosesdecoder/scripts/training/clean-corpus-n.perl corpus.tok $src $src corpus.tok.clean 1 80
-#$mosesdecoder/scripts/training/clean-corpus-n.perl corpus.tok $tgt $tgt corpus.tok.clean 1 80
-#$mosesdecoder/scripts/training/clean-corpus-n.perl input.tok $src $src input.tok.clean 1 80
+$mosesdecoder/scripts/training/clean-corpus-n.perl parallel.tok $src $tgt parallel.tok.clean 1 80
+$mosesdecoder/scripts/training/clean-corpus-n.perl corpus.tok $src $src corpus.tok.clean 1 80
+$mosesdecoder/scripts/training/clean-corpus-n.perl corpus.tok $tgt $tgt corpus.tok.clean 1 80
+$mosesdecoder/scripts/training/clean-corpus-n.perl input.tok $src $src input.tok.clean 1 80
 #
 ## Join setntenses to produce better embeddings
-#cat parallel.tok.clean.$src corpus.tok.clean.$src > full.$src
-#cat parallel.tok.clean.$tgt corpus.tok.clean.$tgt > full.$tgt
+cat parallel.tok.clean.$src corpus.tok.clean.$src > full.$src
+cat parallel.tok.clean.$tgt corpus.tok.clean.$tgt > full.$tgt
 #
 ## Train truecaser
-#$mosesdecoder/scripts/recaser/train-truecaser.perl -corpus full.$src -model corpus-truecase-model.$src
-#$mosesdecoder/scripts/recaser/train-truecaser.perl -corpus full.$tgt -model corpus-truecase-model.$tgt
+$mosesdecoder/scripts/recaser/train-truecaser.perl -corpus full.$src -model corpus-truecase-model.$src
+$mosesdecoder/scripts/recaser/train-truecaser.perl -corpus full.$tgt -model corpus-truecase-model.$tgt
 #
 ## Apply truecaser
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < parallel.tok.clean.$src > parallel.tok.clean.tc.$src
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$tgt < parallel.tok.clean.$tgt > parallel.tok.clean.tc.$tgt
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < corpus.tok.clean.$src > corpus.tok.clean.tc.$src
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$tgt < corpus.tok.clean.$tgt > corpus.tok.clean.tc.$tgt
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < input.tok.clean.$src > input.tok.clean.tc.$src
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < parallel.tok.clean.$src > parallel.tok.clean.tc.$src
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$tgt < parallel.tok.clean.$tgt > parallel.tok.clean.tc.$tgt
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < corpus.tok.clean.$src > corpus.tok.clean.tc.$src
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$tgt < corpus.tok.clean.$tgt > corpus.tok.clean.tc.$tgt
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < input.tok.clean.$src > input.tok.clean.tc.$src
 #
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < full.$src > full.tc.$src
-#$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$tgt < full.$tgt > full.tc.$tgt
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$src < full.$src > full.tc.$src
+$mosesdecoder/scripts/recaser/truecase.perl -model corpus-truecase-model.$tgt < full.$tgt > full.tc.$tgt
 
 # Run FastText
-#fastText/fasttext skipgram -input full.tc.$src -minCount 2 -epoch $fasttext_epochs -loss ns -thread 16 -dim 300 -output embedding.ft.$src -neg 10
-#rm embedding.ft.$src.bin
-#fastText/fasttext skipgram -input full.tc.$tgt -minCount 2 -epoch $fasttext_epochs -loss ns -thread 16 -dim 300 -output embedding.ft.$tgt -neg 10
-#rm embedding.ft.$tgt.bin
+fastText/fasttext skipgram -input full.tc.$src -minCount 2 -epoch $fasttext_epochs -loss ns -thread 16 -dim 300 -output embedding.ft.$src -neg 10
+rm embedding.ft.$src.bin
+fastText/fasttext skipgram -input full.tc.$tgt -minCount 2 -epoch $fasttext_epochs -loss ns -thread 16 -dim 300 -output embedding.ft.$tgt -neg 10
+rm embedding.ft.$tgt.bin
 
 # Train model
-python3 train.py \
+python train.py \
     -train_src_mono corpus.tok.clean.tc.$src \
     -train_tgt_mono corpus.tok.clean.tc.$tgt \
     -train_src_bi parallel.tok.clean.tc.$src \
