@@ -107,7 +107,6 @@ venv.bak/
 # Pytorch
 *.pt
 
-
 model/corpus.tok.ar		
 model/input.tok.clean.ar
 model/corpus.tok.clean.ar	
@@ -149,6 +148,4 @@ model/embedding.ft.ar.vec
 model/full.ar
 model/full.he
 model/src.pickle
-
-
 

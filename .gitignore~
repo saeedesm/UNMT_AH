@@ -106,6 +106,7 @@ venv.bak/
 
 # Pytorch
 *.pt
+<<<<<<< HEAD
 
 
 model/corpus.tok.ar		
@@ -136,6 +137,21 @@ model/embedding.ft.ar.vec
 model/embedding.ft.he.vec
 model/log.txt
 model/.nfs0000000000baf1c000000e26
+model/all.pickle
+model/corpus-truecase-model.ar
+model/corpus-truecase-model.he
+model/corpus.tok.ar
+model/corpus.tok.clean.ar
+model/corpus.tok.clean.he
+model/corpus.tok.clean.tc.ar
+model/corpus.tok.clean.tc.he
+model/corpus.tok.he
+model/embedding.ft.ar.vec
+model/full.ar
+model/full.he
+model/src.pickle
 
 
 
+=======
+>>>>>>> 4664982a9b08dc5be250022ff2906d342d3352ea
