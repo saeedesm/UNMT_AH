@@ -252,8 +252,8 @@ class Trainer:
                     loss_total = 0
                     diff = time.time() - timer
                     timer = time.time()
-                    translator = Translator(model, self.vocabulary, self.use_cuda)
-                    logger.debug("Translated: "+ translator.translate_sentence("you can prepare your meals here .", "src", "tgt"))
+                    #translator = Translator(model, self.vocabulary, self.use_cuda)
+                    #logger.debug("Translated: "+ translator.translate_sentence("you can prepare your meals here .", "src", "tgt"))
                     logger.info('%s big epoch, %s epoch, %s sec, %.4f main loss' %
                                 (big_epoch, epoch, diff, print_loss_avg))
                 epoch += 1
