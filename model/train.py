@@ -96,7 +96,7 @@ def train_opts(parser):
                        reproducibility.""")
     group.add_argument('-usv_load_from', default=None, type=str,
                        help="Load unsupervised model from file")
-    group.add_argument('-sv_load_from', default=None, type=str,
+    group.add_argument('-sv_load_from', default="model_supervised.pt", type=str,
                        help="Load supervised model from file")
     # Logging
     group = parser.add_argument_group('Logging')
@@ -178,11 +178,11 @@ def init_zero_supervised(vocabulary, save_file, use_cuda):
         model, discriminator, main_optimizer, discriminator_optimizer = load_model(opt.sv_load_from, use_cuda)
         trainer.main_optimizer = main_optimizer
         trainer.discriminator_optimizer = discriminator_optimizer
-    
-    pair_file_names = [(opt.train_src_bi, opt.train_tgt_bi), ]
-    trainer.train_supervised(model, discriminator, pair_file_names, vocabulary, num_words_in_batch=opt.sv_num_words_in_batch,
-                             max_length=opt.max_length,save_file=save_file, big_epochs=opt.supervised_epochs, 
-                             print_every=opt.print_every, save_every=opt.save_every, max_batch_count=opt.n_supervised_batches)
+    else :
+        pair_file_names = [(opt.train_src_bi, opt.train_tgt_bi), ]
+        trainer.train_supervised(model, discriminator, pair_file_names, vocabulary, num_words_in_batch=opt.sv_num_words_in_batch,
+                                 max_length=opt.max_length,save_file=save_file, big_epochs=opt.supervised_epochs,
+                                 print_every=opt.print_every, save_every=opt.save_every, max_batch_count=opt.n_supervised_batches)
     for param in model.parameters():
         param.requires_grad = False
     return Translator(model, vocabulary, use_cuda)
